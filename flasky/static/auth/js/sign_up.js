@@ -6,7 +6,7 @@ var equalTo = function () {
         link: function (scope, element, attributes, ngModel) {
             ngModel.$validators.equalTo = function (modelValue) {
                 return scope.password === modelValue;
-            }
+            };
 
             scope.$watch('password', function () {
                 ngModel.$validate();
@@ -15,6 +15,46 @@ var equalTo = function () {
     }
 };
 
+var validateEmailExist = function ($http, $q) {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attributes, ngModel) {
+            ngModel.$asyncValidators.validateEmailExist = function (modelValue, viewValue) {
+                var validateEmailUrl = 'validate_email/';
+                return $http.post(validateEmailUrl + modelValue)
+                    .then(function (data) {
+                        if (data.data['code'] === 200) {
+                            return true
+                        } else {
+                            return $q.reject(data['msg']);
+                        }
+                    })
+            }
+        }
+    }
+};
+
+var validateUsernameExist = function ($http, $q) {
+    return {
+        require: 'ngModel',
+        link: function (scope, element, attributes, ngModel) {
+            ngModel.$asyncValidators.validateUsernameExist = function (modleValue, viewValue) {
+                var validateUsernameUrl = 'validate_username/';
+                return $http.post(validateUsernameUrl + modleValue)
+                    .then(function (data) {
+                        if (data.data['code'] === 200) {
+                            return true;
+                        } else {
+                            return $q.reject(data['msg']);
+                        }
+                    })
+            }
+        }
+    }
+};
+
+app.directive('validateUsernameExist', validateUsernameExist);
+app.directive('validateEmailExist', validateEmailExist);
 app.directive('equalTo', equalTo);
 
 var signUpAjaxService = function ($http, $httpParamSerializerJQLike) {

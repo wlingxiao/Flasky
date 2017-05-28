@@ -72,26 +72,22 @@ def login_in():
     return render_template('auth/login.html', form=form)
 
 
-@auth.route('/validate_username/<username>')
+@auth.route('/validate_username/<username>', methods=['POST'])
 def validate_username(username):
-    if _validate_email(username):
+    if _validate_exist(username=username):
         return jsonify({'code': 400, 'msg': '用户名已注册'})
     return jsonify({'code': 200, 'msg': 'OK'})
 
 
-def _validate_username(username):
-    return User.query.filter_by(username=username)
-
-
-@auth.route('/validate_email/<email>')
+@auth.route('/validate_email/<email>', methods=['POST'])
 def validate_email(email):
-    if _validate_email(email):
+    if _validate_exist(email=email):
         return jsonify({'code': 400, 'msg': '邮箱已注册'})
     return jsonify({'code': 200, 'msg': 'OK'})
 
 
-def _validate_email(email):
-    return User.query.filter_by(email=email)
+def _validate_exist(**kwargs):
+    return User.query.filter_by(**kwargs).first()
 
 
 # 注册

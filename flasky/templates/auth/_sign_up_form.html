@@ -10,11 +10,11 @@
                 <div class="col-sm-4">
 
                     <input id="username" name="username" class="form-control" type="text"
-                           ng-model="username"
-                           required>
+                           ng-model="username" validate-username-exist required>
                     <div class="help-block has-validation-error" ng-messages="loginForm.username.$error"
                          role="alert" ng-if="loginForm.username.$dirty" ng-cloak>
                         <div ng-message="required">请输入</div>
+                        <div ng-message="validateUsernameExist">用户名已注册</div>
                     </div>
                 </div>
             </div>
@@ -24,12 +24,13 @@
                 <div class="col-sm-4">
 
                     <input id="email" name="email" class="form-control" type="email"
-                           ng-model="email" required/>
+                           ng-model="email" required validate-email-exist/>
 
                     <div class="help-block has-validation-error" ng-messages="loginForm.email.$error"
                          role="alert" ng-if="loginForm.email.$dirty" ng-cloak>
                         <div ng-message="required">请输入</div>
                         <div ng-message="email">请输入有效的邮箱</div>
+                        <div ng-message="validateEmailExist">邮箱已注册</div>
                     </div>
                 </div>
             </div>
