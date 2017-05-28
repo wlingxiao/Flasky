@@ -22,4 +22,7 @@ def create_app(config=None):
     from flasky.auth import auth
     app.register_blueprint(auth)
 
+    from flasky.auth.models import db
+    db.init_app(app)
+
     return app

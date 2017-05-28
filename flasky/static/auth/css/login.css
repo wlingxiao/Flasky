@@ -1,0 +1,11 @@
+.has-validation-error {
+    color: #a94442;
+}
+
+.log-in-button {
+    width: 100%;
+}
+
+.sign-up {
+    text-align: right;
+}
