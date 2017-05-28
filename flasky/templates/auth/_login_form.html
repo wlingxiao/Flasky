@@ -1,5 +1,5 @@
 <div ng-controller="loginController">
-    <form class="form-horizontal" name="loginForm" role="form" method="post" data-toggle="validator">
+    <form class="form-horizontal" name="loginForm" role="form" method="post" action="login">
 
         [[ form.csrf_token ]]
 
@@ -9,7 +9,7 @@
                 <label class="col-sm-2 control-label" for="username">用户名</label>
                 <div class="col-sm-4">
 
-                    <input id="username" name="username" class="form-control" type="text"
+                    <input id="username" name="username_or_email" class="form-control" type="text"
                            placeholder="请输入用户名或邮箱" ng-model="username" required>
 
                     <div class="help-block has-validation-error" ng-messages="loginForm.username.$error"
@@ -41,7 +41,7 @@
                 <div class="col-sm-2"></div>
 
                 <div class="col-sm-4">
-                    <button class="btn btn-primary log-in-button" ng-disabled="!loginForm.$valid">登录</button>
+                    <button class="btn btn-primary log-in-button" ng-disabled="!loginForm.$valid" type="submit">登录</button>
                     <div class="help-block sign-up">
                         <a href="sign_up">立即注册</a>
                     </div>
