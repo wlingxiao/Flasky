@@ -1,5 +1,5 @@
 from . import auth
-from flask import render_template, jsonify
+from flask import render_template, jsonify, url_for, redirect
 from flask_wtf import FlaskForm as Form
 from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Email, EqualTo
@@ -7,7 +7,7 @@ from flask_wtf.csrf import CSRFProtect
 from .models import db, User
 
 from email.utils import parseaddr
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required, login_user
 
 login_manager = LoginManager()
 
@@ -15,8 +15,8 @@ csrf = CSRFProtect()
 
 
 class LoinForm(Form):
-    username_or_email = StringField(u'用户名或邮箱', validators=DataRequired('required'))
-    password = PasswordField(u'密码', validators=DataRequired('required'))
+    username_or_email = StringField(u'用户名或邮箱', validators=[DataRequired('required')])
+    password = PasswordField(u'密码', validators=[DataRequired('required')])
 
 
 class SignUpForm(Form):
@@ -42,13 +42,18 @@ def login_in():
 
     if form.validate_on_submit():
         username_or_email = form.username_or_email.data
+        request_login_user = None
         if check_email(username_or_email):
-            if User.query.filter_by(email=username_or_email):
+            request_login_user = User.query.filter_by(email=username_or_email).first()
+            if request_login_user:
+                login_user(request_login_user)
                 return jsonify({'code': 200, 'msg': 'OK'})
             else:
                 return jsonify({'code': 404, 'msg': '该邮箱未注册'})
         else:
-            if User.query.filter_by(username=username_or_email):
+            request_login_user = User.query.filter_by(username=username_or_email).first()
+            if request_login_user:
+                login_user(request_login_user)
                 return jsonify({'code': 200, 'msg': 'OK'})
             else:
                 return jsonify({'code': 404, 'msg': '该用户名未注册'})
@@ -81,10 +86,27 @@ def _validate_email(email):
 # 注册
 @auth.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
-    pass
+    form = SignUpForm()
+
+    if form.validate_on_submit():
+        old_user_filter_by_username = User.query.filter_by(username=form.username.data)
+        if old_user_filter_by_username:
+            return jsonify({'code': 400, 'msg': u'用户名已注册'})
+
+        old_user_filter_by_email = User.query.filter_by(email=form.email.data)
+        if old_user_filter_by_email:
+            return jsonify({'code': 400, 'msg': '邮箱已注册'})
+
+        user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+        db.session.add(user)
+        db.session.commit()
+        return jsonify({'code': 201, 'msg': 'Created'})
+
+    return render_template('auth/sign_up.html', form=form)
 
 
 # 注销
 @auth.route('/sign_out')
+@login_required
 def sign_out():
-    pass
+    return 'sign out'
