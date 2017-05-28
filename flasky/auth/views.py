@@ -14,6 +14,11 @@ login_manager = LoginManager()
 csrf = CSRFProtect()
 
 
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.filter_by(id=user_id).first()
+
+
 class LoinForm(Form):
     username_or_email = StringField(u'用户名或邮箱', validators=[DataRequired('required')])
     password = PasswordField(u'密码', validators=[DataRequired('required')])
@@ -46,15 +51,21 @@ def login_in():
         if check_email(username_or_email):
             request_login_user = User.query.filter_by(email=username_or_email).first()
             if request_login_user:
-                login_user(request_login_user)
-                return jsonify({'code': 200, 'msg': 'OK'})
+                if request_login_user.verify_password(form.password.data):
+                    login_user(request_login_user)
+                    return jsonify({'code': 200, 'msg': 'OK'})
+                else:
+                    return jsonify({'400': 400, 'msg': u'密码错误'})
             else:
                 return jsonify({'code': 404, 'msg': '该邮箱未注册'})
         else:
             request_login_user = User.query.filter_by(username=username_or_email).first()
             if request_login_user:
-                login_user(request_login_user)
-                return jsonify({'code': 200, 'msg': 'OK'})
+                if request_login_user.verify_password(form.password.data):
+                    login_user(request_login_user)
+                    return jsonify({'code': 200, 'msg': 'OK'})
+                else:
+                    return jsonify({'400': 400, 'msg': u'密码错误'})
             else:
                 return jsonify({'code': 404, 'msg': '该用户名未注册'})
 
@@ -89,11 +100,11 @@ def sign_up():
     form = SignUpForm()
 
     if form.validate_on_submit():
-        old_user_filter_by_username = User.query.filter_by(username=form.username.data)
+        old_user_filter_by_username = User.query.filter_by(username=form.username.data).first()
         if old_user_filter_by_username:
             return jsonify({'code': 400, 'msg': u'用户名已注册'})
 
-        old_user_filter_by_email = User.query.filter_by(email=form.email.data)
+        old_user_filter_by_email = User.query.filter_by(email=form.email.data).first()
         if old_user_filter_by_email:
             return jsonify({'code': 400, 'msg': '邮箱已注册'})
 

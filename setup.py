@@ -6,7 +6,8 @@ setup(
     include_package_data=True,
     install_requires=[
         'flask',
-        'Flask-WTF'
+        'Flask-WTF',
+        'flask-login'
     ],
     setup_requires=[
         'pytest-runner'
