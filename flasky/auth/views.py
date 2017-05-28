@@ -36,7 +36,7 @@ def check_email(input_email):
 
 
 # 登录
-@auth.route('/log_in', methods=['GET', 'POST'])
+@auth.route('/login', methods=['GET', 'POST'])
 def login_in():
     form = LoinForm()
 
@@ -58,7 +58,7 @@ def login_in():
             else:
                 return jsonify({'code': 404, 'msg': '该用户名未注册'})
 
-    return render_template('auth/log_in.html', form=form)
+    return render_template('auth/login.html', form=form)
 
 
 @auth.route('/validate_username/<username>')
