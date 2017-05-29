@@ -9,6 +9,8 @@ class User(db.Model):
     username = db.Column(db.String(80), unique=True)
     email = db.Column(db.String(120), unique=True)
     _password = db.Column('password', db.String(200))
+    sign_up_time = db.Column(db.DateTime)
+    last_visit_time = db.Column(db.DateTime)
 
     @property
     def password(self):
@@ -22,10 +24,12 @@ class User(db.Model):
         assert password
         return check_password_hash(self._password, password)
 
-    def __init__(self, username, email, password):
+    def __init__(self, username, email, password, sign_up_time, last_visit_time):
         self.username = username
         self.email = email
         self.password = password
+        self.sign_up_time = sign_up_time
+        self.last_visit_time = last_visit_time
 
     def __repr__(self):
         return '<User %r>' % self.username

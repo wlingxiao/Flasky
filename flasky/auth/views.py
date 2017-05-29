@@ -5,6 +5,7 @@ from wtforms import StringField, PasswordField
 from wtforms.validators import DataRequired, Email, EqualTo
 from flask_wtf.csrf import CSRFProtect
 from .models import db, User
+from datetime import datetime
 
 from email.utils import parseaddr
 from flask_login import LoginManager, login_required, login_user
@@ -102,9 +103,10 @@ def sign_up():
 
         old_user_filter_by_email = User.query.filter_by(email=form.email.data).first()
         if old_user_filter_by_email:
-            return jsonify({'code': 400, 'msg': '邮箱已注册'})
-
-        user = User(username=form.username.data, email=form.email.data, password=form.password.data)
+            return jsonify({'code': 400, 'msg': u'邮箱已注册'})
+        now = datetime.now()
+        user = User(username=form.username.data, email=form.email.data, password=form.password.data,
+                    sign_up_time=now, last_visit_time=now)
         db.session.add(user)
         db.session.commit()
         return jsonify({'code': 201, 'msg': 'Created'})

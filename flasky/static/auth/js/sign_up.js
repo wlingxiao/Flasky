@@ -21,14 +21,21 @@ var validateEmailExist = function ($http, $q) {
         link: function (scope, element, attributes, ngModel) {
             ngModel.$asyncValidators.validateEmailExist = function (modelValue, viewValue) {
                 var validateEmailUrl = 'validate_email/';
-                return $http.post(validateEmailUrl + modelValue)
-                    .then(function (data) {
-                        if (data.data['code'] === 200) {
-                            return true
-                        } else {
-                            return $q.reject(data['msg']);
-                        }
-                    })
+
+                return $http({
+                    method: 'POST',
+                    url: validateEmailUrl + modelValue,
+                    headers: {'X-CSRFToken': $('#csrf_token').val()}
+
+                }).then(function (response) {
+                    if (response.data['code'] === 200) {
+                        return true
+                    } else {
+                        return $q.reject(response['msg'])
+                    }
+                })['catch'](function (response) {
+                    return $q.reject('请求错误');
+                })
             }
         }
     }
@@ -40,14 +47,20 @@ var validateUsernameExist = function ($http, $q) {
         link: function (scope, element, attributes, ngModel) {
             ngModel.$asyncValidators.validateUsernameExist = function (modleValue, viewValue) {
                 var validateUsernameUrl = 'validate_username/';
-                return $http.post(validateUsernameUrl + modleValue)
-                    .then(function (data) {
-                        if (data.data['code'] === 200) {
-                            return true;
-                        } else {
-                            return $q.reject(data['msg']);
-                        }
-                    })
+
+                return $http({
+                    method: 'POST',
+                    url: validateUsernameUrl + modleValue,
+                    headers: {'X-CSRFToken': $('#csrf_token').val()}
+                }).then(function (response) {
+                    if (response.data['code'] === 200) {
+                        return true;
+                    } else {
+                        return $q.reject(response['msg']);
+                    }
+                })['catch'](function (response) {
+                    return $q.reject('请求错误')
+                });
             }
         }
     }
