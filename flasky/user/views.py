@@ -9,8 +9,10 @@ from datetime import datetime
 def load_all_user():
     username = request.args.get('username')
     email = request.args.get('email')
-    sign_up_time = request.args.get('sign_up_time')
-    last_visit_time = request.args.get('last_visit_time')
+    sign_up_time_start = request.args.get('sign_up_time_start')
+    sign_up_time_end = request.args.get('sign_up_time_end')
+    last_visit_time_start = request.args.get('last_visit_time_start')
+    last_visit_time_end = request.args.get('last_visit_time_end')
 
     query_param = []
     if username:

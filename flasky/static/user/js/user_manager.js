@@ -12,7 +12,23 @@ app.service('userManagerAjaxService', function ($http, $httpParamSerializerJQLik
     }
 });
 
+$(function () {
+    initDatePicker($('#last-login-time .input-daterange'));
+    initDatePicker($('#sign-up-time .input-daterange'));
+});
+
+function initDatePicker(jqeuryElement) {
+    jqeuryElement.datepicker({
+        format: 'yyyy-mm-dd',
+        clearBtn: true,
+        language: 'zh-CN',
+        todayHighlight: true
+    })
+}
+
 app.controller('userManagerController', function ($scope, userManagerAjaxService) {
+
+
     userManagerAjaxService.loadAllUsers().then(function (response) {
         transformUsers(response)
     });
@@ -42,8 +58,10 @@ app.controller('userManagerController', function ($scope, userManagerAjaxService
         var queryParm = {
             username: $scope.username,
             email: $scope.email,
-            'sign_up_time': $scope.signUpTime,
-            'last_visit_time': $scope.lastVisitTime
+            'sign_up_time_start': $scope.signUpTimeStart,
+            'sign_up_time_end': $scope.signUpTimeEnd,
+            'last_visit_time_start': $scope.lastVisitTimeStart,
+            'last_visit_time_end': $scope.lastVisitTimeEnd
         };
 
         userManagerAjaxService.loadAllUsers(queryParm)
@@ -53,11 +71,11 @@ app.controller('userManagerController', function ($scope, userManagerAjaxService
     };
 
     $scope.resetSearch = function () {
-        $scope.username = null;
-        $scope.email = null;
-        $scope.signUpTime = null;
-        $scope.lastVisitTime = null;
-
+        $scope.username = '';
+        $scope.email = '';
+        $('.input-daterange input').each(function () {
+            $(this).datepicker('clearDates');
+        });
         userManagerAjaxService.loadAllUsers()
             .then(function (response) {
                 transformUsers(response)
