@@ -1,17 +1,21 @@
 # -*- coding: utf-8 -*-
 
 from flask import Flask
+import os
 
 
 def create_app(config=None):
     app = Flask(__name__)
 
-    app.secret_key = 's3cr3t'
-
-    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///../test.db'
-    app.config['WTF_CSRF_ENABLED'] = False
+    app.config.update(dict(
+        SECRET_KEY='s3cr3t',
+        SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.root_path, 'flasky.db'),
+        WTF_CSRF_ENABLED=True
+    ))
     app.jinja_env.variable_start_string = '[['
     app.jinja_env.variable_end_string = ']]'
+
+    app.config.update(config or {})
 
     app.jinja_env.auto_reload = True
     app.config['TEMPLATES_AUTO_RELOAD'] = True
