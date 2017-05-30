@@ -23,18 +23,18 @@
 
             <!-- 注册时间 -->
             <div class="col-sm-1">
-                <label for="sign-up-time">注册时间</label>
+                <label for="sign-up-time-start">注册时间</label>
             </div>
             <div class="col-sm-4">
                 <div id="sign-up-time" class="row">
                     <div class="col-sm-5 input-daterange">
-                        <input id="sign-up-time" class="form-control" ng-model="signUpTimeStart" name="start">
+                        <input id="sign-up-time-start" class="form-control" ng-model="signUpTimeStart" name="start">
                     </div>
                     <div class="col-sm-2">
                         <span>到</span>
                     </div>
                     <div class="col-sm-5 input-daterange">
-                        <input id="sign-up-time" class="form-control" ng-model="signUpTimeEnd" name="end">
+                        <input id="sign-up-time-end" class="form-control" ng-model="signUpTimeEnd" name="end">
                     </div>
                 </div>
             </div>
@@ -94,5 +94,10 @@
                 </tbody>
             </table>
         </div>
+    </div>
+    <div style="text-align: right;">
+        <div>共 10 页</div>
+        <ul first-text="首页" previous-text="上一页" next-text="下一页" last-text="末页" uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize"
+            class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
     </div>
 </div>

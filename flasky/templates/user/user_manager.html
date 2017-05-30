@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" ng-app="app">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>注册用户管理</title>
@@ -7,17 +7,9 @@
     <link href="//cdn.bootcss.com/bootstrap-datepicker/1.7.0-RC3/css/bootstrap-datepicker.min.css" rel="stylesheet">
     <link href="/static/auth/css/login.css" rel="stylesheet">
 
-    <script src="//cdn.bootcss.com/jquery/3.2.1/jquery.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.js"></script>
-    <script src="//cdn.bootcss.com/angular.js/1.6.4/angular.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-messages/1.6.4/angular-messages.js"></script>
-    <script src="//cdn.bootcss.com/moment.js/2.18.1/moment.min.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap-datepicker/1.7.0-RC3/js/bootstrap-datepicker.js"></script>
-    <script src="//cdn.bootcss.com/bootstrap-datepicker/1.7.0-RC3/locales/bootstrap-datepicker.zh-CN.min.js"></script>
-
-    <script src="/static/user/js/user_manager.js"></script>
 </head>
 <body>
 {% include 'user/_user_manager_table.html' %}
+<script src="//cdn.bootcss.com/require.js/2.3.3/require.js" data-main="/static/user/js/main.js"></script>
 </body>
 </html>
