@@ -7,12 +7,14 @@ setup(
     install_requires=[
         'flask',
         'Flask-WTF',
-        'flask-login'
+        'flask-login',
+        'Flask-SQLAlchemy'
     ],
     setup_requires=[
         'pytest-runner'
     ],
     tests_require=[
-        'pytest'
+        'pytest',
+        'flask_testing'
     ]
 )

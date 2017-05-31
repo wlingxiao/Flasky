@@ -1,28 +1,31 @@
-from unittest import TestCase
-from flasky import create_app
+from flasky import create_app as flasky_create_app
 import json
-import tempfile
 from flasky.auth.models import db, User
-import os
+from flask_testing import TestCase
+from datetime import datetime
 
 
 class AuthTest(TestCase):
-    def setUp(self):
-        self.test_database_file = os.path.join(os.getcwd(), 'test.db')
-
-        app = create_app(dict(
-            SQLALCHEMY_DATABASE_URI='sqlite:///' + self.test_database_file,
+    def create_app(self):
+        self.app = flasky_create_app(dict(
+            SQLALCHEMY_DATABASE_URI='sqlite:///:memory:',
             WTF_CSRF_ENABLED=False,
-            TESTING=True
+            TESTING=True,
+            SQLALCHEMY_TRACK_MODIFICATIONS=False
         ))
+        return self.app
 
-        with app.app_context():
-            db.create_all()
-            test_user = User(username='test', email='test@test.com', password='111111')
-            db.session.add(test_user)
-            db.session.commit()
+    def setUp(self):
+        db.create_all()
+        self.client = self.app.test_client(use_cookies=True)
+        AuthTest.save_user()
 
-        self.client = app.test_client()
+    @staticmethod
+    def save_user():
+        test_user = User(username='test', email='test@test.com', password='111111', sign_up_time=datetime.now(),
+                         last_visit_time=datetime.now())
+        db.session.add(test_user)
+        db.session.commit()
 
     def test_validate_email_exist(self):
         response = self.client.post('/auth/validate_email/' + 'test@test.com')
@@ -41,5 +44,5 @@ class AuthTest(TestCase):
         self.assertEqual(200, json.loads(response.data)['code'])
 
     def tearDown(self):
-        if os.path.exists(self.test_database_file):
-            os.remove(self.test_database_file)
+        db.session.remove()
+        db.drop_all()
