@@ -15,6 +15,6 @@ setup(
     ],
     tests_require=[
         'pytest',
-        'flask_testing'
+        'Flask-Testing'
     ]
 )
