@@ -15,6 +15,7 @@ setup(
     ],
     tests_require=[
         'pytest',
-        'Flask-Testing'
+        'Flask-Testing',
+        'coverage'
     ]
 )
