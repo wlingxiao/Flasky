@@ -39,14 +39,14 @@ def index():
 
 def check_email(input_email):
     """ 判断字符串是否为邮箱 """
-    
+
     return '@' in parseaddr(input_email)[1]
 
 
 @auth.route('/login', methods=['GET', 'POST'])
 def login_in():
     """ 登录 """
-    
+
     form = LoinForm()
 
     if form.validate_on_submit():
@@ -97,7 +97,7 @@ def _validate_exist(**kwargs):
 @auth.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
     """ 用户注册 """
-    
+
     form = SignUpForm()
 
     if form.validate_on_submit():
