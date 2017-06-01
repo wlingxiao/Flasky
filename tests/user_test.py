@@ -20,7 +20,14 @@ class UserTest(TestCase):
         self.client = self.app.test_client(use_cookies=True)
         self.save_user()
 
+    def delete_all_users(self):
+        """ Delete all users in test database """
+
+        User.query.delete()
+
     def save_user(self):
+        """ 保存测试 User """
+
         test_user_1 = User(username='test1', email='test1@test.com', password='111111',
                            sign_up_time=datetime.now(),
                            last_visit_time=datetime.now())
@@ -47,17 +54,38 @@ class UserTest(TestCase):
         self.assertEqual(1, json.loads(response.data)['size'])
 
     def test_load_all_user_filter_by_sign_up_time_start_and_end(self):
-        yesterday = datetime.now() + timedelta(days=-1)
+        """ 使用注册时间区间来筛选 User """
+
+        self.delete_all_users()
+        today = datetime.now()
         user_sign_up_time_start_and_end = User(username='sign_up_time_start_and_end',
                                                email='sign_up_time_start_and_end@test.com', password='111111',
-                                               sign_up_time=yesterday,
-                                               last_visit_time=yesterday)
+                                               sign_up_time=today,
+                                               last_visit_time=today)
         db.session.add(user_sign_up_time_start_and_end)
         db.session.commit()
 
-        yesterday_str = datetime.strftime(yesterday, '%Y-%m-%d')
+        today_str = datetime.strftime(today, '%Y-%m-%d')
         response = self.client.get(
-            '/user/load_all_user' + '?sign_up_time_start=' + yesterday_str + '&sign_up_time_end=' + yesterday_str)
+            '/user/load_all_user' + '?sign_up_time_start=' + today_str + '&sign_up_time_end=' + today_str)
+        self.assertEqual(200, json.loads(response.data)['code'])
+        self.assertEqual(1, json.loads(response.data)['size'])
+
+    def test_load_all_user_filter_by_last_login_time_start_and_end(self):
+        """ 使用最后访问时间区间来筛选 User """
+
+        self.delete_all_users()
+        today = datetime.now()
+        user_last_login_time_start_and_end = User(username='last_login_time_start_and_end',
+                                                  email='last_login_time_start_and_end@test.com', password='111111',
+                                                  sign_up_time=today,
+                                                  last_visit_time=today)
+        db.session.add(user_last_login_time_start_and_end)
+        db.session.commit()
+
+        today_str = datetime.strftime(today, '%Y-%m-%d')
+        response = self.client.get(
+            '/user/load_all_user' + '?last_visit_time_start=' + today_str + '&last_visit_time_end=' + today_str)
         self.assertEqual(200, json.loads(response.data)['code'])
         self.assertEqual(1, json.loads(response.data)['size'])
 

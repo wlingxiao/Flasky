@@ -38,12 +38,15 @@ def index():
 
 
 def check_email(input_email):
+    """ 判断字符串是否为邮箱 """
+    
     return '@' in parseaddr(input_email)[1]
 
 
-# 登录
 @auth.route('/login', methods=['GET', 'POST'])
 def login_in():
+    """ 登录 """
+    
     form = LoinForm()
 
     if form.validate_on_submit():
@@ -56,9 +59,9 @@ def login_in():
                     login_user(request_login_user)
                     return jsonify({'code': 200, 'msg': 'OK'})
                 else:
-                    return jsonify({'400': 400, 'msg': u'密码错误'})
+                    return jsonify({'code': 400, 'msg': u'密码错误'})
             else:
-                return jsonify({'code': 404, 'msg': '该邮箱未注册'})
+                return jsonify({'code': 404, 'msg': u'该邮箱未注册'})
         else:
             request_login_user = User.query.filter_by(username=username_or_email).first()
             if request_login_user:
@@ -66,9 +69,9 @@ def login_in():
                     login_user(request_login_user)
                     return jsonify({'code': 200, 'msg': 'OK'})
                 else:
-                    return jsonify({'400': 400, 'msg': u'密码错误'})
+                    return jsonify({'code': 400, 'msg': u'密码错误'})
             else:
-                return jsonify({'code': 404, 'msg': '该用户名未注册'})
+                return jsonify({'code': 404, 'msg': u'该用户名未注册'})
 
     return render_template('auth/login.html', form=form)
 
@@ -91,9 +94,10 @@ def _validate_exist(**kwargs):
     return User.query.filter_by(**kwargs).first()
 
 
-# 注册
 @auth.route('/sign_up', methods=['GET', 'POST'])
 def sign_up():
+    """ 用户注册 """
+    
     form = SignUpForm()
 
     if form.validate_on_submit():
