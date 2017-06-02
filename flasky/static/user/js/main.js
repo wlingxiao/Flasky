@@ -44,13 +44,16 @@ requirejs.config({
 /**
  * angular module init
  */
-define('app', ['angular', 'userManagerController', 'userManagerAjaxService', 'uiBootstrap', 'uiBootstrapTpls'], function (ng, userManagerController, userManagerAjaxService) {
-    'use strict'
-    var app = ng.module('app', ['ui.bootstrap']);
-    app.controller('userManagerController', userManagerController);
-    app.service('userManagerAjaxService', userManagerAjaxService);
-    return app;
-});
+define('app', ['angular', 'userManagerController', 'userManagerAjaxService', 'viewUserDirective',
+        'uiBootstrap', 'uiBootstrapTpls'],
+    function (ng, userManagerController, userManagerAjaxService, viewUserDirective) {
+        'use strict'
+        var app = ng.module('app', ['ui.bootstrap']);
+        app.controller('userManagerController', userManagerController);
+        app.service('userManagerAjaxService', userManagerAjaxService);
+        app.directive('viewUser', viewUserDirective);
+        return app;
+    });
 
 /**
  * angular bootstrap

@@ -34,6 +34,7 @@ define('userManagerController', ['datepickerUtil', 'jquery'], function (datepick
                     for (var i = 0; i < responseUsers.length; i++) {
                         var item = responseUsers[i];
                         users.push({
+                            id: item['id'],
                             username: item['username'],
                             email: item['email'],
                             signUpTime: item['sign_up_time'],

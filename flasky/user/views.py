@@ -56,8 +56,8 @@ def load_all_user():
         'size': filter_users_size,
         'data': [
             {'id': per_user.id, 'username': per_user.username, 'email': per_user.email,
-             'sign_up_time': per_user.sign_up_time.strftime('%Y-%m-%d'),
-             'last_visit_time': per_user.last_visit_time.strftime('%Y-%m-%d')}
+             'sign_up_time': per_user.sign_up_time.strftime('%Y-%m-%d %H:%M'),
+             'last_visit_time': per_user.last_visit_time.strftime('%Y-%m-%d %H:%M')}
             for per_user in users]
     }
 
