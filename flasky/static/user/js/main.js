@@ -32,6 +32,10 @@ requirejs.config({
         'uiBootstrapTpls': {
             exports: 'uiBootstrapTpls',
             deps: ['uiBootstrap']
+        },
+        'bootstrap': {
+            exports: 'bootstrap',
+            deps: ['jquery']
         }
     },
     deps: ['ng-bootstrap']

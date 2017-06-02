@@ -10,7 +10,8 @@ def create_app(config=None):
     app.config.update(dict(
         SECRET_KEY='s3cr3t',
         SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.root_path, 'flasky.db'),
-        WTF_CSRF_ENABLED=True
+        WTF_CSRF_ENABLED=True,
+        SQLALCHEMY_TRACK_MODIFICATIONS=False
     ))
     app.jinja_env.variable_start_string = '[['
     app.jinja_env.variable_end_string = ']]'

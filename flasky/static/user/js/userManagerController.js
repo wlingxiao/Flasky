@@ -1,21 +1,23 @@
 define('userManagerController', ['datepickerUtil', 'jquery'], function (datepickerUtil, $) {
 
     return function ($scope, userManagerAjaxService) {
-
-        $scope.totalItems = 64;
-        $scope.currentPage = 4;
-
-        $scope.setPage = function (pageNo) {
-            $scope.currentPage = pageNo;
-        };
-
         $scope.pageChanged = function () {
-            $log.log('Page changed to: ' + $scope.currentPage);
-        };
+            var queryParm = {
+                username: $scope.username,
+                email: $scope.email,
+                'sign_up_time_start': $('#sign-up-time-start').val(),
+                'sign_up_time_end': $('#sign-up-time-end').val(),
+                'last_visit_time_start': $('#last-login-time-start').val(),
+                'last_visit_time_end': $('#last-login-time-end').val(),
+                'page': $scope.currentPage,
+                'page_size': 10
+            };
 
-        $scope.maxSize = 5;
-        $scope.bigTotalItems = 175;
-        $scope.bigCurrentPage = 1;
+            userManagerAjaxService.loadAllUsers(queryParm)
+                .then(function (response) {
+                    transformUsers(response)
+                })
+        };
 
         userManagerAjaxService.loadAllUsers().then(function (response) {
             transformUsers(response);
@@ -25,7 +27,9 @@ define('userManagerController', ['datepickerUtil', 'jquery'], function (datepick
             var data = response['data'];
             if (data) {
                 if (data['code'] === 200) {
+                    $scope.totalItems = data['size'];
                     var responseUsers = data['data'];
+                    $scope.totalPage = parseInt($scope.totalItems / 10) + 1;
                     var users = [];
                     for (var i = 0; i < responseUsers.length; i++) {
                         var item = responseUsers[i];
@@ -43,15 +47,7 @@ define('userManagerController', ['datepickerUtil', 'jquery'], function (datepick
         }
 
         $scope.searchUser = function () {
-            /*var queryParm = {
-                username: $scope.username,
-                email: $scope.email,
-                'sign_up_time_start': $scope.signUpTimeStart,
-                'sign_up_time_end': $scope.signUpTimeEnd,
-                'last_visit_time_start': $scope.lastVisitTimeStart,
-                'last_visit_time_end': $scope.lastVisitTimeEnd
-            };*/
-
+            $scope.currentPage = 1;
             var queryParm = {
                 username: $scope.username,
                 email: $scope.email,
@@ -68,6 +64,7 @@ define('userManagerController', ['datepickerUtil', 'jquery'], function (datepick
         };
 
         $scope.resetSearch = function () {
+            $scope.currentPage = 1;
             $scope.username = '';
             $scope.email = '';
             datepickerUtil.clearDateRanger();

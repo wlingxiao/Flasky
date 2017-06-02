@@ -69,35 +69,34 @@
         </div>
     </div>
 
-    <div>
-        <div>
-            <table class="table table-striped">
-                <thead>
-                <tr>
-                    <th>用户名</th>
-                    <th>邮箱</th>
-                    <th>注册时间</th>
-                    <th>最后登录时间</th>
-                    <th>操作</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr ng-repeat="item in users" ng-cloak>
-                    <td>{{ item.username }}</td>
-                    <td>{{ item.email }}</td>
-                    <td>{{ item.signUpTime }}</td>
-                    <td>{{ item.lastVisitTime }}</td>
-                    <td>
-                        <button class="btn btn-primary">禁用</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
+    <div style="min-height: 700px">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>用户名</th>
+                <th>邮箱</th>
+                <th>注册时间</th>
+                <th>最后登录时间</th>
+                <th>操作</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr ng-repeat="item in users" ng-cloak>
+                <td>{{ item.username }}</td>
+                <td>{{ item.email }}</td>
+                <td>{{ item.signUpTime }}</td>
+                <td>{{ item.lastVisitTime }}</td>
+                <td>
+                    <button class="btn btn-primary">查看</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
     <div style="text-align: right;">
-        <div>共 10 页</div>
-        <ul first-text="首页" previous-text="上一页" next-text="下一页" last-text="末页" uib-pagination total-items="bigTotalItems" ng-model="bigCurrentPage" max-size="maxSize"
+        <div>共 <span ng-bind="totalPage"></span> 页</div>
+        <ul first-text="首页" previous-text="上一页" next-text="下一页" last-text="末页" uib-pagination
+            total-items="totalItems" ng-model="currentPage" max-size="maxSize" ng-change="pageChanged()"
             class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
     </div>
 </div>
