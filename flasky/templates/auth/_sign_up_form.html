@@ -5,7 +5,7 @@
 
         <div class="container">
             <!-- 用户名 -->
-            <div class="form-group">
+            <div class="form-group" ng-class="loginForm.username.$valid | hasSuccessOrError:'has-success':'has-error' ">
                 <label class="col-sm-2 control-label" for="username">用户名</label>
                 <div class="col-sm-4">
 
@@ -19,7 +19,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" ng-class="loginForm.email.$valid | hasSuccessOrError:'has-success':'has-error'">
                 <label class="col-sm-2 control-label" for="email">邮箱</label>
                 <div class="col-sm-4">
 
@@ -35,7 +35,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" ng-class="loginForm.password.$valid | hasSuccessOrError:'has-success':'has-error'">
                 <label class="col-sm-2 control-label" for="password">密码</label>
                 <div class="col-sm-4">
 
@@ -50,7 +50,7 @@
                 </div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" ng-class="loginForm.confirmPassword.$valid | hasSuccessOrError:'has-success':'has-error'">
                 <label class="col-sm-2 control-label" for="confirmPassword">重复密码</label>
                 <div class="col-sm-4">
 

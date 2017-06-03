@@ -66,6 +66,13 @@ var validateUsernameExist = function ($http, $q) {
     }
 };
 
+var hasSuccessOrError = function () {
+    return function (input, hasSuccess, hasError) {
+        return input ? hasSuccess : hasError;
+    }
+};
+
+app.filter('hasSuccessOrError', hasSuccessOrError);
 app.directive('validateUsernameExist', validateUsernameExist);
 app.directive('validateEmailExist', validateEmailExist);
 app.directive('equalTo', equalTo);
