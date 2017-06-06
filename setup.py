@@ -8,7 +8,9 @@ setup(
         'flask',
         'Flask-WTF',
         'flask-login',
-        'Flask-SQLAlchemy'
+        'Flask-SQLAlchemy',
+        'Flask-Migrate',
+        'Flask-Script'
     ],
     setup_requires=[
         'pytest-runner'
