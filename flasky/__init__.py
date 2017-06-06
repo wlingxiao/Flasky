@@ -10,7 +10,7 @@ def create_app(config=None):
     app.config.update(dict(
         SECRET_KEY='s3cr3t',
         SQLALCHEMY_DATABASE_URI='sqlite:///' + os.path.join(app.root_path, 'flasky.db'),
-        WTF_CSRF_ENABLED=True,
+        WTF_CSRF_ENABLED=False,
         SQLALCHEMY_TRACK_MODIFICATIONS=False
     ))
     app.jinja_env.variable_start_string = '[['
@@ -29,6 +29,9 @@ def create_app(config=None):
 
     from flasky.user import user
     app.register_blueprint(user)
+
+    from flasky.post import post
+    app.register_blueprint(post)
 
     from flasky.auth.models import db
     db.init_app(app)

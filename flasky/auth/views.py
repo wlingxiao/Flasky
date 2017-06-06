@@ -8,7 +8,7 @@ from .models import db, User
 from datetime import datetime
 
 from email.utils import parseaddr
-from flask_login import LoginManager, login_required, login_user
+from flask_login import LoginManager, login_required, login_user, current_user
 
 login_manager = LoginManager()
 
