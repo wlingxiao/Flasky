@@ -17,7 +17,7 @@ class User(db.Model):
     sign_up_time = db.Column(db.DateTime)
     last_visit_time = db.Column(db.DateTime)
     posts = db.relationship('Post')
-
+    
     @property
     def password(self):
         raise AttributeError(u'Cannot not read password')
@@ -62,8 +62,9 @@ class Post(db.Model):
     title = db.Column(db.String(500))
     content = db.Column(db.String(1000))
     create_time = db.Column(db.DateTime, default=datetime.utcnow)
-    comments = db.relationship('Comment')
+    comments = db.relationship('Comment', back_populates='post')
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user = db.relationship('User', backref='user')
 
 
 class Comment(db.Model):
@@ -79,3 +80,4 @@ class Comment(db.Model):
     # 评论目标用户 ID若没有则为空
     to_user_id = db.Column(db.Integer)
     post_id = db.Column(db.Integer, db.ForeignKey('post.id'))
+    post = db.relationship('Post', back_populates='comments')
