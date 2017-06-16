@@ -1,5 +1,5 @@
 <div>
-    <a class="btn btn-link" data-toggle="modal" data-target="#myModal">回复</a>
+    <a class="btn btn-link" data-toggle="modal" data-target="#myModal" ng-click="commitCommentToUser(comment.id)">回复</a>
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
         <div class="modal-dialog">
@@ -17,7 +17,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-                    <button type="button" class="btn btn-primary" ng-click="commitCommentToUser(comment.id)">提交</button>
+                    <button type="button" class="btn btn-primary" ng-click="submmitCommentToUser()">提交</button>
                 </div>
             </div>
         </div>
