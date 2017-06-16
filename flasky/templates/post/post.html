@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link href="//cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.css" rel="stylesheet">
+    <link href="/static/post/css/post.css" rel="stylesheet">
+    <title>Title</title>
+</head>
+<body>
+<div ng-controller="postController" ng-cloak>
+    <div class="container">
+        <div><span>标题</span><span>{{ postBody.title }}</span></div>
+        <div><span>内容</span><span>{{ postBody.content }}</span></div>
+        <div><span>创建时间</span><span>{{ postBody.create_time | date : 'yyyy-MM-dd' }}</span></div>
+        <div>评论区</div>
+        <div>
+            <div ng-repeat="comment in comments">
+                <div class="well well-sm">
+
+                    <div class="well well-sm" ng-if="comment.toCommentId">
+                        <div>
+                            <span>{{ comment.toUserName }}</span><span> 发表于</span>
+                            <span>{{ comment.toCommentCreateTime | date: 'yyyy-MM-dd HH:mm' }}</span>
+                            <a href="#">go</a>
+                        </div>
+                        <div>
+                            <span>内容</span><span>{{ comment.toCommentContent }}</span>
+                        </div>
+                    </div>
+                    <span>内容</span><span>{{ comment.content }}</span>
+
+
+                    <button type="button" class="btn btn-primary" ng-click="commitCommentToUser(comment.id)">提交</button>
+
+
+                    <comment-to-user></comment-to-user>
+                </div>
+            </div>
+        </div>
+        <div>评论</div>
+        <div><textarea ng-model="commentContent"></textarea></div>
+        <a class="btn btn-primary" ng-click="commitComment()">评论</a>
+    </div>
+</div>
+<script src="//cdn.bootcss.com/require.js/2.3.3/require.js" data-main="/static/post/js/main.js"></script>
+</body>
+</html>

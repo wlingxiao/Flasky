@@ -10,12 +10,15 @@ def post_index():
     return render_template('/post/post.html')
 
 
-@post.route('/show_post/<post_id>')
+@post.route('/show_post/<int:post_id>')
 def show_post(post_id):
     current_post = Post.query.filter_by(id=post_id).first()
-    return jsonify({'id': current_post.id, 'title': current_post.title, 'content': current_post.content,
-                    'create_time': current_post.create_time.strftime('%Y-%m-%d'), 'user_id': current_post.user_id,
-                    'code': 200, 'msg': 'OK'})
+    if current_post:
+        return jsonify({'id': current_post.id, 'title': current_post.title, 'content': current_post.content,
+                        'create_time': current_post.create_time.strftime('%Y-%m-%d'), 'user_id': current_post.user_id,
+                        'code': 200, 'msg': 'OK'})
+    else:
+        return jsonify({'code': 200})
 
 
 @post.route('/create_post', methods=['POST'])
@@ -47,7 +50,7 @@ def comment_to_post(post_id):
     return '200'
 
 
-@post.route('/comment/<post_id>')
+@post.route('/comment/<int:post_id>')
 def post_comment(post_id):
     comment_ = Comment.query.filter_by(post_id=post_id).all()
     result = {
@@ -60,23 +63,38 @@ def post_comment(post_id):
                 'content': per_comment.content,
                 'create_date': per_comment.create_date.strftime('%Y-%m-%d %H:%M'),
                 'from_user_id': per_comment.from_user_id,
+                'from_user_name': per_comment.from_user_name,
                 'to_user_id': per_comment.to_user_id,
-                'post_id': per_comment.post_id
+                'to_user_name': per_comment.to_user_name,
+                'to_comment_id': per_comment.to_comment_id,
+                'to_comment_content': per_comment.to_comment_content,
+                'to_comment_create_time': per_comment.to_comment_create_time,
+                'post_id': per_comment.post_id,
             } for per_comment in comment_
         ]
     }
     return jsonify(result)
 
 
-@post.route('/comment_to_user/<to_user_id>', methods=['POST'])
+@post.route('/comment_to_user/<comment_id>', methods=['POST'])
 @login_required
-def comment_to_user(to_user_id):
+def comment_to_user(comment_id):
     post_id = request.form['post_id']
     comment = Comment()
     comment.content = request.form['content']
     comment.post_id = post_id
     comment.from_user_id = current_user.id
-    comment.to_user_id = to_user_id
+    comment.from_user_name = current_user.username
+    comment.to_comment_id = comment_id
+
+    to_comment = Comment.query.filter_by(id=comment_id).first()
+    if to_comment:
+        comment.to_user_id = to_comment.from_user_id
+        comment.to_user_name = to_comment.from_user_name
+        comment.to_comment_create_time = to_comment.create_date
+        comment.to_comment_content = to_comment.content
+    else:
+        raise AttributeError
 
     db.session.add(comment)
     db.session.commit()
