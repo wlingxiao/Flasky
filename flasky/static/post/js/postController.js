@@ -1,7 +1,7 @@
 define('postController', function () {
     return function ($scope, $http, $httpParamSerializerJQLike) {
-
-        $http.get('/post/show_post/1').then(function (response) {
+        var postId = $('#postId').val();
+        $http.get('/post/show_post/' + postId).then(function (response) {
             var data = response['data'];
             if (data && data['code'] === 200) {
                 var postBody = {};
@@ -14,7 +14,7 @@ define('postController', function () {
 
                 $scope.postBody = postBody;
 
-                return $http.get('/post/comment/1')
+                return $http.get('/post/comment/' + postId)
             }
         }).then(function (response) {
             var data = response['data'];
@@ -41,11 +41,11 @@ define('postController', function () {
         });
 
         $scope.commitComment = function () {
-            var data = {content: $scope.commentToUserContent};
+            var data = {content: $scope.commentContent};
 
             $http({
                 method: 'POST',
-                url: '/post/comment_to_post/1',
+                url: '/post/comment_to_post/' + postId,
                 headers: {'Content-Type': 'application/x-www-form-urlencoded'},
                 data: $httpParamSerializerJQLike(data)
             }).then(function (response) {
@@ -61,7 +61,7 @@ define('postController', function () {
                     console.log('no input');
                     return;
                 }
-                var data = {content: $scope.commentToUserContent, 'post_id': 1};
+                var data = {content: $scope.commentToUserContent, 'post_id': parseInt(postId)};
                 $http({
                     method: 'POST',
                     url: '/post/comment_to_user/' + commentId,

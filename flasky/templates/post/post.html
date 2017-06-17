@@ -9,6 +9,7 @@
 <body>
 <div ng-controller="postController" ng-cloak>
     <div class="container">
+        <input id="postId" type="hidden" value="[[ post_id ]]">
         <div><span>标题</span><span>{{ postBody.title }}</span></div>
         <div><span>内容</span><span>{{ postBody.content }}</span></div>
         <div><span>创建时间</span><span>{{ postBody.create_time | date : 'yyyy-MM-dd' }}</span></div>
