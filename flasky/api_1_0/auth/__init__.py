@@ -26,7 +26,7 @@ def check_email(input_email):
     return '@' in parseaddr(input_email)[1]
 
 
-@auth.route('/login', methods=['GET', 'POST'])
+@auth.route('/session', methods=['POST'])
 def login_in():
     """ 登录 """
 
@@ -56,17 +56,15 @@ def login_in():
             else:
                 return jsonify({'code': 404, 'msg': u'该用户名未注册'})
 
-    return render_template('auth/login.html', form=form)
 
-
-@auth.route('/validate_username/<username>', methods=['POST'])
+@auth.route('/users/username/<username>', methods=['GET'])
 def validate_username(username):
     if _validate_exist(username=username):
         return jsonify({'code': 400, 'msg': '用户名已注册'})
     return jsonify({'code': 200, 'msg': 'OK'})
 
 
-@auth.route('/validate_email/<email>', methods=['POST'])
+@auth.route('/users/email/<email>', methods=['GET'])
 def validate_email(email):
     if _validate_exist(email=email):
         return jsonify({'code': 400, 'msg': '邮箱已注册'})
@@ -77,7 +75,7 @@ def _validate_exist(**kwargs):
     return User.query.filter_by(**kwargs).first()
 
 
-@auth.route('/sign_up', methods=['GET', 'POST'])
+@auth.route('/users', methods=['POST'])
 def sign_up():
     """ 用户注册 """
 
@@ -102,7 +100,7 @@ def sign_up():
 
 
 # 注销
-@auth.route('/sign_out')
+@auth.route('/session', methods=['DELETE'])
 @login_required
 def sign_out():
     return 'sign out'
