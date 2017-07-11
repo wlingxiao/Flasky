@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from flasky.api_1_0 import api as auth
 
-from flask import render_template, jsonify, url_for, redirect
+from flask import jsonify
 from flask_wtf.csrf import CSRFProtect
 from .models import db, User
 from datetime import datetime
@@ -34,7 +34,6 @@ def login_in():
 
     if form.validate_on_submit():
         username_or_email = form.username_or_email.data
-        request_login_user = None
         if check_email(username_or_email):
             request_login_user = User.query.filter_by(email=username_or_email).first()
             if request_login_user:
@@ -95,8 +94,6 @@ def sign_up():
         db.session.add(user)
         db.session.commit()
         return jsonify({'code': 201, 'msg': 'Created'})
-
-    return render_template('auth/sign_up.html', form=form)
 
 
 # 注销

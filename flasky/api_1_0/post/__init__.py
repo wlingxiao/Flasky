@@ -11,7 +11,7 @@ def post_index(post_id):
     return render_template('/post/post.html', post_id=post_id)
 
 
-@post.route('/show_post/<int:post_id>')
+@post.route('/posts/<int:post_id>')
 def show_post(post_id):
     current_post = Post.query.filter_by(id=post_id).first()
     if current_post:
@@ -22,7 +22,7 @@ def show_post(post_id):
         return jsonify({'code': 200})
 
 
-@post.route('/load_all_posts')
+@post.route('/posts', methods=['GET'])
 def load_all_posts():
     posts = Post.query.order_by(Post.create_time.desc()).limit(10).offset(0)
 
@@ -31,15 +31,10 @@ def load_all_posts():
                         {'id': per_post.id, 'title': per_post.title,
                          'content': per_post.content, 'create_time': per_post.create_time}
                         for per_post in posts
-                        ]})
+                    ]})
 
 
-@post.route('/new_post')
-def new_post():
-    return render_template('/post/new_post.html')
-
-
-@post.route('/create_post', methods=['POST'])
+@post.route('/posts', methods=['POST'])
 @login_required
 def create_post():
     title = request.form['title']
@@ -89,7 +84,7 @@ def post_comment(post_id):
                 'to_comment_create_time': per_comment.to_comment_create_time,
                 'post_id': per_comment.post_id,
             } for per_comment in comment_
-            ]
+        ]
     }
     return jsonify(result)
 
