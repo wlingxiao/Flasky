@@ -42,4 +42,8 @@ def create_app(config=None):
     from flasky.auth.views import login_manager
     login_manager.init_app(app)
 
+    # register api blueprint
+    from flasky.api import api_blueprint
+    app.register_blueprint(api_blueprint)
+
     return app

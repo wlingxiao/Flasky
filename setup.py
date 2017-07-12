@@ -10,7 +10,8 @@ setup(
         'flask-login',
         'Flask-SQLAlchemy',
         'Flask-Migrate',
-        'Flask-Script'
+        'Flask-Script',
+        'flask-restful'
     ],
     setup_requires=[
         'pytest-runner'
