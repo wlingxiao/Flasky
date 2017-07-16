@@ -5,6 +5,8 @@ from flask_restful import Api
 from flasky.auth.models import User
 from sqlalchemy import and_
 import datetime
+from flask_login import LoginManager, login_required, login_user, current_user
+from .decorators import permission_required
 
 
 class UserResource(Resource):
@@ -13,6 +15,8 @@ class UserResource(Resource):
 
 
 class UserListResource(Resource):
+    @login_required
+    @permission_required(1)
     def get(self):
         username = request.args.get('username')
         email = request.args.get('email')

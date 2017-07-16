@@ -52,6 +52,9 @@ class User(db.Model):
     def get_id(self):
         return self.id
 
+    def can(self, permission):
+        return True
+
 
 class Post(db.Model):
     """ Post """
