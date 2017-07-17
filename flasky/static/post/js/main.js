@@ -17,13 +17,12 @@ requirejs.config({
     deps: ['ng-bootstrap']
 });
 
-define('app', ['angular', 'postController', 'commentToUserDirective', 'newPostController', 'bootstrap'],
-    function (ng, postController, commentToUserDirective, newPostController, bootstrap) {
+define('app', ['angular', 'postController', 'commentToUserDirective', 'bootstrap'],
+    function (ng, postController, commentToUserDirective, bootstrap) {
         'use strict'
         var app = ng.module('app', []);
         app.directive('commentToUser', commentToUserDirective);
         app.controller('postController', postController);
-        app.controller('newPostController', newPostController);
         return app;
     });
 

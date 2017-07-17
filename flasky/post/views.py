@@ -5,9 +5,9 @@ from flasky.auth.models import db, User, Post, Comment
 from flask_login import current_user, login_required
 
 
-@post.route('/<int:post_id>')
-def post_index(post_id):
-    return render_template('/post/post.html', post_id=post_id)
+@post.route('/')
+def post_index():
+    return render_template('/post/post.html')
 
 
 @post.route('/show_post/<int:post_id>')
@@ -19,23 +19,6 @@ def show_post(post_id):
                         'code': 200, 'msg': 'OK'})
     else:
         return jsonify({'code': 200})
-
-
-@post.route('/load_all_posts')
-def load_all_posts():
-    posts = Post.query.order_by(Post.create_time.desc()).limit(10).offset(0)
-
-    return jsonify({'code': 200, 'msg': 'OK', 'size': 20,
-                    'data': [
-                        {'id': per_post.id, 'title': per_post.title,
-                         'content': per_post.content, 'create_time': per_post.create_time}
-                        for per_post in posts
-                    ]})
-
-
-@post.route('/new_post')
-def new_post():
-    return render_template('/post/new_post.html')
 
 
 @post.route('/create_post', methods=['POST'])
@@ -51,7 +34,7 @@ def create_post():
 
     db.session.add(post_)
     db.session.commit()
-    return jsonify({'code': 201, 'msg': 'Created'})
+    return '200'
 
 
 @post.route('/comment_to_post/<post_id>', methods=['POST'])

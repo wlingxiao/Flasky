@@ -33,9 +33,6 @@ def create_app(config=None):
     from flasky.post import post
     app.register_blueprint(post)
 
-    from flasky.index import index
-    app.register_blueprint(index)
-
     from flasky.auth.models import db
     db.init_app(app)
 
