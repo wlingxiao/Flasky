@@ -1,4 +1,4 @@
-from flask_restful import Resource
+from flask_restful import Resource, reqparse
 from flask import jsonify, request
 from . import api_blueprint
 from flask_restful import Api
@@ -10,13 +10,16 @@ from .decorators import permission_required
 
 
 class UserResource(Resource):
-    def get(self, id):
-        return jsonify({'name': 'xiaoming', 'id': 1})
+    def get(self, user_id):
+        user = User.query.get(user_id)
+        return {'id': user.id,
+                'username': user.username,
+                'email': user.email,
+                'sign_up_time': user.sign_up_time.timestamp(),
+                'last_visit_time': user.last_visit_time.timestamp()}, 200
 
 
 class UserListResource(Resource):
-    @login_required
-    @permission_required(1)
     def get(self):
         username = request.args.get('username')
         email = request.args.get('email')
@@ -77,6 +80,9 @@ class UserListResource(Resource):
 
         return jsonify(result)
 
+    def post(self):
+        pass
+
 
 def _validate_exist(**kwargs):
     return User.query.filter_by(**kwargs).first()
@@ -97,5 +103,5 @@ def validate_username(username):
 
 
 user_api = Api(api_blueprint)
-user_api.add_resource(UserResource, '/users/<int:id>')
+user_api.add_resource(UserResource, '/users/<int:user_id>')
 user_api.add_resource(UserListResource, '/users')
