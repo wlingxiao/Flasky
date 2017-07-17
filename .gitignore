@@ -105,3 +105,6 @@ ENV/
 
 # db file
 *.db
+
+# visual studio code
+.vscode
