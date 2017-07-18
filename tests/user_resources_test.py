@@ -7,7 +7,7 @@ from datetime import datetime
 URL_PREFIX = '/api/v1'
 
 
-class UserApiTest(TestCase):
+class UserResourcesTest(TestCase):
     def create_app(self):
         self.app = flasky_create_app(dict(
             SQLALCHEMY_DATABASE_URI='sqlite:///:memory:',
@@ -41,7 +41,7 @@ class UserApiTest(TestCase):
         response = self.client.get(URL_PREFIX + '/users/username/' + 'test')
         self.assertEqual(302, response.status_code)
 
-    def test_create_user(self):
+    def test_get_user_by_id(self):
         test_user = User(username='test', email='test@test.com', password='111111', sign_up_time=datetime.now(),
                          last_visit_time=datetime.now())
         self.save_user(test_user)

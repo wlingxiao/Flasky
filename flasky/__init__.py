@@ -36,7 +36,7 @@ def create_app(config=None):
     from flasky.auth.models import db
     db.init_app(app)
 
-    from flasky.api.SessionApi import login_manager
+    from flasky.api.session_resources import login_manager
     login_manager.init_app(app)
 
     # register api blueprint
