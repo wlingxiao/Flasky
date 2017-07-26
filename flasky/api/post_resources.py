@@ -3,6 +3,7 @@ from . import api_blueprint
 from flasky.auth.models import db, User, Post, Comment
 from flask_restful import reqparse
 from flask_login import current_user, login_required
+from flask import request, jsonify
 
 
 class PostResource(Resource):
@@ -47,23 +48,22 @@ comment_parser = reqparse.RequestParser()
 comment_parser.add_argument('content', type=str, help=u'评论内容', required=True)
 
 
-class CommentPostResource(Resource):
-    @login_required
-    def post(self, post_id):
-        args = comment_parser.parse_args()
+@api_blueprint.route('/comments/post/<int:post_id>', methods=['POST'])
+@login_required
+def comment_to_post(post_id):
+    comment = Comment()
+    if not request.json:
+        raise AttributeError('content should not none')
 
-        comment = Comment()
-        comment.content = args['content']
-        comment.post_id = post_id
-        comment.from_user_id = current_user.id
+    comment.content = request.json['content']
+    comment.post_id = post_id
+    comment.from_user_id = current_user.id
 
-        db.session.add(comment)
-        db.session.commit()
-
-        return {'message': 'Created'}, 204
+    db.session.add(comment)
+    db.session.commit()
+    return jsonify({"message": "Created"}), 204
 
 
-session_api = Api(api_blueprint)
-session_api.add_resource(PostResource, '/posts/<int:post_id>')
-session_api.add_resource(Posts, '/posts')
-session_api.add_resource(CommentPostResource, '/comments/post/<int:post_id>')
+post_api = Api(api_blueprint)
+post_api.add_resource(PostResource, '/posts/<int:post_id>')
+post_api.add_resource(Posts, '/posts')

@@ -56,6 +56,22 @@ class PostTest(TestCase):
         response = self.client.get(URL_PREFIX + '/posts' + '/1')
         self.assertEqual(200, response.status_code)
 
+    def test_comment_to_post(self):
+        """
+        测试文章评论
+        """
+
+        post_ = Post()
+        post_.id = 1
+        post_.user_id = 1
+        post_.title = "test"
+        post_.content = "test@test.com"
+        self.save_post(post_)
+
+        response = self.client.post(URL_PREFIX + '/comments/post' + '/1', data=json.dumps({'content': 'test'}),
+                                    content_type="application/json")
+        self.assertEqual(204, response.status_code)
+
     def tearDown(self):
         db.session.remove()
         db.drop_all()
