@@ -45,6 +45,17 @@ class PostTest(TestCase):
 
         self.assertEqual(201, response.status_code)
 
+    def test_load_post(self):
+        post_ = Post()
+        post_.id = 1
+        post_.user_id = 1
+        post_.title = "test"
+        post_.content = "test@test.com"
+        self.save_post(post_)
+        response = self.client.get(URL_PREFIX + '/posts')
+
+        self.assertEqual(200, response.status_code)
+
     def test_get_post_by_id(self):
         post_ = Post()
         post_.id = 1

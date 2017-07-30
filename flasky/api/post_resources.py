@@ -7,7 +7,6 @@ from flask import request, jsonify
 
 
 class PostResource(Resource):
-    @login_required
     def get(self, post_id):
         current_post = Post.query.filter_by(id=post_id).first()
         if current_post:
@@ -22,9 +21,12 @@ parser = reqparse.RequestParser()
 parser.add_argument('title', type=str, help=u'文章名称', required=True)
 parser.add_argument('content', type=str, help=u'文章内容', required=True)
 
+post_page_parse = reqparse.RequestParser()
+post_page_parse.add_argument('page', type=int, required=False)
+post_page_parse.add_argument('page_size', type=int, required=False)
+
 
 class Posts(Resource):
-    @login_required
     def post(self):
         """
         创建文章
@@ -42,6 +44,19 @@ class Posts(Resource):
         db.session.commit()
 
         return {'message': 'Created'}, 201
+
+    def get(self):
+        args = post_page_parse.parse_args()
+
+        page = args['page']
+        if page is None:
+            page = 1
+        page_size = args['page_size']
+        if page_size is None or page_size > 20:
+            page_size = 10
+        size = Post.query.count()
+        posts = Post.query.filter_by().order_by(Post.create_time.desc()).limit(page_size).offset((page - 1) * page_size)
+        return {'size': size, 'data': [{'id': post.id, 'title': post.title, 'content': post.title} for post in posts]}
 
 
 comment_parser = reqparse.RequestParser()
